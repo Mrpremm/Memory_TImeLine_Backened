@@ -1,9 +1,11 @@
 // server.js
-require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const dbConnect = require('./config/db');
+const path = require('path');
 
+require('dotenv').config();
 const app = express();
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:5173',
@@ -18,7 +20,8 @@ dbConnect();
 // routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/memories', require('./routes/memories'));
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/upload', require('./routes/upload'));
 // simple ping
 app.get('/api/ping', (req, res) => res.json({ ok: true, msg: 'Server is up' }));
 
